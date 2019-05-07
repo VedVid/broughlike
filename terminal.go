@@ -49,6 +49,8 @@ const (
 	FontSize    = 24
 )
 
+var TerminalSeed = ""
+
 func constrainThreads() {
 	/* Constraining processor and threads is necessary,
 	   because BearLibTerminal often crashes otherwise. */
@@ -64,7 +66,7 @@ func InitializeBLT() {
 	sizeFont := strconv.Itoa(FontSize)
 	window := "window: size=" + sizeX + "x" + sizeY
 	blt.Set(window + ", title=' " + GameTitle + " " + GameVersion +
-		"'; font: " + FontName + ", size=" + sizeFont)
+		" " + TerminalSeed + "'; font: " + FontName + ", size=" + sizeFont)
 	blt.Clear()
 	blt.Refresh()
 }

@@ -31,6 +31,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -106,8 +107,21 @@ func StartGame(b *Board, c *Creatures) {
 	}
 }
 
+func StringToSeed(s string) int64 {
+	seed, err := strconv.ParseInt(s, 10, 64)
+	if err != nil {
+		fmt.Println("Error encountered during conversion from string to seed;\n" +
+			"    using current time instead.")
+		seed = time.Now().UTC().UnixNano()
+	}
+	return seed
+}
+
 func init() {
 	rand.Seed(time.Now().UTC().UnixNano())
+	seedS := strconv.Itoa(rand.Intn(1000000))
+	rand.Seed(StringToSeed(seedS))
+	TerminalSeed = "(" + seedS + ")"
 	InitializeBLT()
 	InitializeKeyboardLayouts()
 	ReadOptionsControls()

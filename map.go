@@ -100,7 +100,6 @@ func MakeDrunkardsMap(b Board) {
 	percent := float64(MapSizeX*MapSizeY) / float64(100)
 	digMin := RoundFloatToInt(percent * float64(60))
 	digMax := RoundFloatToInt(percent * float64(85))
-	fmt.Println(digMin, digMax)
 	diggedPercent := RandRange(digMin, digMax)
 	var directions = [][]int{{0, 1}, {-1, 0}, {1, 0}, {0, -1}}
 	x, y := MapSizeX/2, MapSizeY/2
