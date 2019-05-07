@@ -28,7 +28,6 @@ package main
 
 import (
 	blt "bearlibterminal"
-	"fmt"
 )
 
 const (
@@ -186,12 +185,13 @@ func PrintUI(c *Creature) {
 		}
 		blt.Print(MapSizeX+1, MapSizeY-2-y, electromagneticStr)
 	}
-	var numbers = []string{"1", "2", "3", "4"}
-	for i, v := range numbers {
+	var numbersTemp = []string{"1", "2", "3", "4"}
+	var numbers = []string{}
+	for i, v := range numbersTemp {
 		if i == c.Active {
-			v = "[color=lighter gray]" + v + "[/color]"
+			numbers = append(numbers, "[color=white]"+v+"[/color]")
 		} else {
-			v = "[color=gray]" + v + "[/color]"
+			numbers = append(numbers, "[color=gray]"+v+"[/color]")
 		}
 	}
 	blt.Print(MapSizeX, 0, numbers[0]+numbers[1])
