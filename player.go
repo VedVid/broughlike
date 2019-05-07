@@ -111,3 +111,16 @@ func (c *Creature) MoveOrAttack(tx, ty int, b Board, all Creatures) bool {
 	}
 	return turnSpent
 }
+
+func (c *Creature) SetWeapon(i int) bool {
+	i--
+	if i < 0 || i > 3 {
+		return false
+	}
+	if i == c.Active {
+		return false
+	} else {
+		c.Active = i
+		return true
+	}
+}

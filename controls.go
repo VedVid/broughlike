@@ -35,11 +35,15 @@ const (
 	   They have to be strings due to
 	   testing these values with strings
 	   from options_controls.cfg file. */
-	StrMoveNorth = "MOVE_NORTH"
-	StrMoveWest  = "MOVE_WEST"
-	StrMoveEast  = "MOVE_EAST"
-	StrMoveSouth = "MOVE_SOUTH"
-	StrPickup    = "PICKUP"
+	StrMoveNorth  = "MOVE_NORTH"
+	StrMoveWest   = "MOVE_WEST"
+	StrMoveEast   = "MOVE_EAST"
+	StrMoveSouth  = "MOVE_SOUTH"
+	StrPickup     = "PICKUP"
+	StrSetWeapon1 = "WEAPON_1"
+	StrSetWeapon2 = "WEAPON_2"
+	StrSetWeapon3 = "WEAPON_3"
+	StrSetWeapon4 = "WEAPON_4"
 )
 
 var Actions = []string{
@@ -49,6 +53,10 @@ var Actions = []string{
 	StrMoveEast,
 	StrMoveSouth,
 	StrPickup,
+	StrSetWeapon1,
+	StrSetWeapon2,
+	StrSetWeapon3,
+	StrSetWeapon4,
 }
 
 var CommandKeys = map[int]string{
@@ -58,6 +66,10 @@ var CommandKeys = map[int]string{
 	blt.TK_DOWN:  StrMoveSouth,
 	blt.TK_LEFT:  StrMoveWest,
 	blt.TK_SPACE: StrPickup,
+	blt.TK_1:     StrSetWeapon1,
+	blt.TK_2:     StrSetWeapon2,
+	blt.TK_3:     StrSetWeapon3,
+	blt.TK_4:     StrSetWeapon4,
 }
 
 /* Place to store customized controls scheme,
@@ -84,6 +96,14 @@ func Command(com string, p *Creature, b *Board, c *Creatures) bool {
 		turnSpent = p.MoveOrAttack(-1, 0, *b, *c)
 	case StrPickup:
 		turnSpent = p.PickUp()
+	case StrSetWeapon1:
+		turnSpent = p.SetWeapon(1)
+	case StrSetWeapon2:
+		turnSpent = p.SetWeapon(2)
+	case StrSetWeapon3:
+		turnSpent = p.SetWeapon(3)
+	case StrSetWeapon4:
+		turnSpent = p.SetWeapon(4)
 	}
 	return turnSpent
 }
