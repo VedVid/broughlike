@@ -37,6 +37,7 @@ import (
 const NoOfLevels = 6
 
 var CurrentLevel = 1
+var LevelMaps = []Board{}
 
 var KeyboardLayout int
 var CustomControls bool
@@ -76,12 +77,16 @@ func main() {
 func NewGame(b *Board, c *Creatures) {
 	/* Function NewGame initializes game state - creates player, monsters,
 	   and game map. */
-	*b = MakeNewLevel()
 	player, err := NewPlayer(MapSizeX/2, MapSizeY/2)
 	if err != nil {
 		fmt.Println(err)
 	}
 	*c = append(*c, player)
+	for i := 0; i < NoOfLevels; i++ {
+		newLevel := MakeNewLevel()
+		LevelMaps = append(LevelMaps, newLevel)
+	}
+	*b = LevelMaps[0]
 }
 
 func StartGame(b *Board, c *Creatures) {
