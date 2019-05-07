@@ -58,8 +58,8 @@ const (
 	KineticColorGood         = "amber"
 	KineticColorBad          = "darker amber"
 	ElectromagneticIcon      = "☇"
-	ElectromagneticColorGood = "yellow"
-	ElectromagneticColorBad  = "darker yellow"
+	ElectromagneticColorGood = "cyan"
+	ElectromagneticColorBad  = "darker cyan"
 )
 
 func PrintBoard(b Board, c Creatures) {
