@@ -184,7 +184,6 @@ func BacktrackPath(nodes [][]*Node, start *Node) (int, int, error) {
 			if x == start.X && y == start.Y {
 				continue // This node is the current node.
 			}
-			fmt.Println(nodes[x][y].Weight, direction.Weight)
 			if nodes[x][y].Weight == nodeInitialWeight {
 				continue // Node is not part of path.
 			}
