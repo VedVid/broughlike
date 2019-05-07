@@ -48,7 +48,7 @@ const (
 )
 
 const (
-	BallisticIcon            = "↑"
+	BallisticIcon            = "☉"
 	BallisticColorGood       = "crimson"
 	BallisticColorBad        = "darker crimson"
 	ExplosiveIcon            = "☄"
