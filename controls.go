@@ -40,10 +40,10 @@ const (
 	StrMoveEast   = "MOVE_EAST"
 	StrMoveSouth  = "MOVE_SOUTH"
 	StrPickup     = "PICKUP"
-	StrSetWeapon1 = "WEAPON_1"
-	StrSetWeapon2 = "WEAPON_2"
-	StrSetWeapon3 = "WEAPON_3"
-	StrSetWeapon4 = "WEAPON_4"
+	StrSetWeapon1 = "CHOOSE_WEAPON_1"
+	StrSetWeapon2 = "CHOOSE_WEAPON_2"
+	StrSetWeapon3 = "CHOOSE_WEAPON_3"
+	StrSetWeapon4 = "CHOOSE_WEAPON_4"
 )
 
 var Actions = []string{
