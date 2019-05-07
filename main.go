@@ -34,6 +34,10 @@ import (
 	"time"
 )
 
+const NoOfLevels = 6
+
+var CurrentLevel = 1
+
 var KeyboardLayout int
 var CustomControls bool
 

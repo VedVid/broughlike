@@ -27,8 +27,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package main
 
 import (
-	"strconv"
-
 	blt "bearlibterminal"
 )
 
@@ -106,10 +104,30 @@ func PrintUI(c *Creature) {
 	   new elements of game mechanics will be introduced. So, for now, it
 	   provides only one basic, yet essential information: player's HP. */
 	blt.Layer(UILayer)
-	name := "Player"
-	blt.Print(UIPosX, UIPosY, name)
-	hp := "[color=red]HP: " + strconv.Itoa(c.HPCurrent) + "\\" + strconv.Itoa(c.HPMax)
-	blt.Print(UIPosX, UIPosY+1, hp)
+	const hpIconFull = "♦"
+	const hpIconEmpty = "♢"
+	hp := "[color=light blue]"
+	for i := 1; i <= c.HPMax; i++ {
+		if i > c.HPCurrent {
+			hp = hp + hpIconEmpty
+		} else {
+			hp = hp + hpIconFull
+		}
+	}
+	hp = hp + "[/color]"
+	blt.Print(UIPosX+1, UIPosY, hp)
+	const levelIcon = "■"
+	const levelColor = "darkest green"
+	const levelCurrentColor = "dark green"
+	for i := 1; i <= NoOfLevels; i++ {
+		if i != CurrentLevel {
+			blt.Color(blt.ColorFromName(levelColor))
+		} else {
+			blt.Color(blt.ColorFromName(levelCurrentColor))
+		}
+		blt.Print(UIPosX+i-1+3, UIPosY+1, levelIcon)
+	}
+	blt.Color(blt.ColorFromName("white"))
 }
 
 func RenderAll(b Board, c Creatures) {
