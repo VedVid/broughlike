@@ -72,8 +72,8 @@ func main() {
 func NewGame(b *Board, c *Creatures) {
 	/* Function NewGame initializes game state - creates player, monsters,
 	   and game map. */
-	*b = InitializeEmptyMap()
-	player, err := NewPlayer(1, 1)
+	*b = MakeNewLevel()
+	player, err := NewPlayer(MapSizeX/2, MapSizeY/2)
 	if err != nil {
 		fmt.Println(err)
 	}

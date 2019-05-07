@@ -29,6 +29,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"math/rand"
 	"unicode/utf8"
 )
 
@@ -85,11 +86,86 @@ func InitializeEmptyMap() Board {
 	for x := 0; x < MapSizeX; x++ {
 		for y := 0; y < MapSizeY; y++ {
 			var err error
-			b[x][y], err = NewTile(BoardLayer, x, y, ".", "floor", "light gray",
-				"dark gray", true, true, false, false)
+			b[x][y], err = NewTile(BoardLayer, x, y, "#", "floor", "dark gray",
+				"darkest gray", true, true, true, false)
 			if err != nil {
 				fmt.Println(err)
 			}
+		}
+	}
+	return b
+}
+
+func MakeDrunkardsMap(b Board) {
+	percent := float64(MapSizeX*MapSizeY) / float64(100)
+	digMin := RoundFloatToInt(percent * float64(80))
+	digMax := RoundFloatToInt(percent * float64(95))
+	fmt.Println(digMin, digMax)
+	diggedPercent := RandRange(digMin, digMax)
+	var directions = [][]int{{0, 1}, {-1, 0}, {1, 0}, {0, -1}}
+	x, y := MapSizeX/2, MapSizeY/2
+	for {
+		if b[x][y].Blocked == true {
+			b[x][y].Char = "."
+			b[x][y].Blocked = false
+			b[x][y].Color = "light gray"
+			b[x][y].ColorDark = "dark gray"
+			diggedPercent--
+		}
+		if diggedPercent <= 0 {
+			break
+		}
+		dir := directions[rand.Intn(len(directions))]
+		newX := x + dir[0]
+		newY := y + dir[1]
+		if newX >= 0 && newX < MapSizeX &&
+			newY >= 0 && newY < MapSizeY {
+			x = newX
+			y = newY
+		}
+	}
+}
+
+func MapCheck(b Board) bool {
+	valid := true
+	var q1 = []int{0, MapSizeX / 2, 0, MapSizeY / 2}
+	var q2 = []int{MapSizeX / 2, MapSizeX, 0, MapSizeY / 2}
+	var q3 = []int{MapSizeX / 2, MapSizeX, MapSizeY / 2, MapSizeY}
+	var q4 = []int{0, MapSizeX / 2, MapSizeY / 2, MapSizeY}
+	var count = []int{}
+	sum := 0
+	var qs = [][]int{q1, q2, q3, q4}
+	for _, q := range qs {
+		counter := 0
+		for x := q[0]; x < q[1]; x++ {
+			for y := q[2]; y < q[3]; y++ {
+				if b[x][y].Blocked == true {
+					counter++
+				}
+			}
+		}
+		count = append(count, counter)
+		sum += counter
+	}
+	average := float64(sum) / float64(len(qs))
+	percent := average / float64(100)
+	min := RoundFloatToInt(average - (percent * 20))
+	max := RoundFloatToInt(average + (percent * 20))
+	for _, v := range count {
+		if v < min && v > max {
+			valid = false
+		}
+	}
+	return valid
+}
+
+func MakeNewLevel() Board {
+	var b Board
+	for {
+		b = InitializeEmptyMap()
+		MakeDrunkardsMap(b)
+		if MapCheck(b) == true {
+			break
 		}
 	}
 	return b
