@@ -102,9 +102,6 @@ func FindAdjacent(b Board, c Creatures, nodes [][]*Node, frontiers []*Node, star
 				if nodes[x][y].Weight != nodeInitialWeight {
 					continue //node is marked as traversed already
 				}
-				if x != frontiers[i].X && y == frontiers[i].Y {
-					continue //it should disable diagonal movement
-				}
 				if x == frontiers[i].X && y == frontiers[i].Y {
 					continue //it's the current frontier node
 				}
