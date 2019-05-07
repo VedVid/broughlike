@@ -56,7 +56,8 @@ func CreaturesTakeTurn(b Board, c Creatures) {
 func HandleAI(b Board, cs Creatures, c *Creature) {
 	/* HandleAI is small function that decides if monster will
 	   attack player or move towards him. */
-	if c.DistanceTo(cs[0].X, cs[0].Y) > 1 {
+	if c.DistanceTo(cs[0].X, cs[0].Y) > 1 ||
+		(c.X != cs[0].X && c.Y != cs[0].Y) {
 		c.MoveTowardsPath(b, cs, cs[0].X, cs[0].Y)
 	} else {
 		c.AttackTarget(cs[0])
