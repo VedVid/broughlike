@@ -29,6 +29,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"math/rand"
 	"unicode/utf8"
 )
 
@@ -90,6 +91,20 @@ func NewCreature(x, y int, monsterFile string) (*Creature, error) {
 	if monster.Defense < 0 {
 		txt := InitialDefenseError(monster.Defense)
 		err2 = errors.New("Creature defense value is smaller than 0." + txt)
+	}
+	var monsterColors = []string{BallisticColorGood, KineticColorGood,
+		ElectromagneticColorGood, ExplosiveColorGood}
+	monster.Color = monsterColors[rand.Intn(len(monsterColors))]
+	monster.ColorDark = monster.Color
+	switch monster.Color {
+	case BallisticColorGood:
+		monster.Ballistic = 1
+	case KineticColorGood:
+		monster.Kinetic = 1
+	case ElectromagneticColorGood:
+		monster.Electromagnetic = 1
+	case ExplosiveColorGood:
+		monster.Explosive = 1
 	}
 	return monster, err2
 }

@@ -1,8 +1,8 @@
 {
     "Char":"&",
     "Name":"enemy",
-    "Color":"green",
-    "ColorDark":"green",
+    "Color":"transparent",
+    "ColorDark":"transparent",
 	"Layer":5,
     "AlwaysVisible":true,
     "Blocked":true,
