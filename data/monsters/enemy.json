@@ -10,7 +10,7 @@
     "AIType":3,
     "AITriggered":true,
     "HPMax":3,
-    "HPCurrent":10,
+    "HPCurrent":3,
     "Attack":1,
     "Defense":0,
 	"Basic": 0,

@@ -83,3 +83,31 @@ func NewPlayer(x, y int) (*Creature, error) {
 	}
 	return player, err2
 }
+
+func (c *Creature) MoveOrAttack(tx, ty int, b Board, all Creatures) bool {
+	/* Method MoveOrAttack decides if Creature will move or attack other Creature;
+	   It has *Creature receiver, and takes tx, ty (coords) integers as arguments,
+	   and map of current level, and list of all Creatures.
+	   Starts by target that is nil, then iterates through Creatures. If there is
+	   Creature on targeted tile, that Creature becomes new target for attack.
+	   Otherwise, Creature moves to specified Tile.
+	   It's supposed to take player as receiver (attack / moving enemies is
+	   handled differently - check ai.go and combat.go). */
+	var target *Creature
+	turnSpent := false
+	for i, _ := range all {
+		if all[i].X == c.X+tx && all[i].Y == c.Y+ty {
+			if all[i].HPCurrent > 0 {
+				target = all[i]
+				break
+			}
+		}
+	}
+	if target != nil {
+		c.AttackTarget(target)
+		turnSpent = true
+	} else {
+		turnSpent = c.Move(tx, ty, b)
+	}
+	return turnSpent
+}
