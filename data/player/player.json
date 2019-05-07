@@ -12,5 +12,11 @@
     "HPMax":10,
     "HPCurrent":10,
     "Attack":1,
-    "Defense":0
+    "Defense":0,
+	"Basic": 0,
+	"Ballistic": 2,
+	"Explosive": 2,
+	"Kinetic": 2,
+	"Electromagnetic":2,
+	"Active": 0
 }

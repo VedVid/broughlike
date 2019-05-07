@@ -28,6 +28,7 @@ package main
 
 import (
 	blt "bearlibterminal"
+	"fmt"
 )
 
 const (
@@ -45,6 +46,21 @@ const (
 	CreaturesLayer
 	PlayerLayer
 	LookLayer
+)
+
+const (
+	BallisticIcon            = "↑"
+	BallisticColorGood       = "crimson"
+	BallisticColorBad        = "darker crimson"
+	ExplosiveIcon            = "☄"
+	ExplosiveColorGood       = "flame"
+	ExplosiveColorBad        = "darker flame"
+	KineticIcon              = "☀"
+	KineticColorGood         = "amber"
+	KineticColorBad          = "darker amber"
+	ElectromagneticIcon      = "☇"
+	ElectromagneticColorGood = "yellow"
+	ElectromagneticColorBad  = "darker yellow"
 )
 
 func PrintBoard(b Board, c Creatures) {
@@ -120,14 +136,66 @@ func PrintUI(c *Creature) {
 	const levelColor = "darkest green"
 	const levelCurrentColor = "dark green"
 	for i := 1; i <= NoOfLevels; i++ {
+		levelStr := ""
 		if i != CurrentLevel {
-			blt.Color(blt.ColorFromName(levelColor))
+			levelStr =
+				"[color=" + levelColor + "]" + levelIcon + "[/color]"
 		} else {
-			blt.Color(blt.ColorFromName(levelCurrentColor))
+			levelStr =
+				"[color=" + levelCurrentColor + "]" + levelIcon + "[/color]"
 		}
-		blt.Print(UIPosX+i-1+3, UIPosY+1, levelIcon)
+		blt.Print(UIPosX+i-1+3, UIPosY+1, levelStr)
 	}
-	blt.Color(blt.ColorFromName("white"))
+	for y := 0; y < 5; y++ {
+		ballisticStr := ""
+		if y < c.Ballistic {
+			ballisticStr =
+				"[color=" + BallisticColorGood + "]" + BallisticIcon + "[/color]"
+		} else {
+			ballisticStr =
+				"[color=" + BallisticColorBad + "]" + BallisticIcon + "[/color]"
+		}
+		blt.Print(MapSizeX, 1+y, ballisticStr)
+		explosiveStr := ""
+		if y < c.Explosive {
+			explosiveStr =
+				"[color=" + ExplosiveColorGood + "]" + ExplosiveIcon + "[/color]"
+		} else {
+			explosiveStr =
+				"[color=" + ExplosiveColorBad + "]" + ExplosiveIcon + "[/color]"
+		}
+		blt.Print(MapSizeX+1, 1+y, explosiveStr)
+		kineticStr := ""
+		if y < c.Kinetic {
+			kineticStr =
+				"[color=" + KineticColorGood + "]" + KineticIcon + "[/color]"
+		} else {
+			kineticStr =
+				"[color=" + KineticColorBad + "]" + KineticIcon + "[/color]"
+		}
+		blt.Print(MapSizeX, MapSizeY-2-y, kineticStr)
+		electromagneticStr := ""
+		if y < c.Electromagnetic {
+			electromagneticStr =
+				"[color=" + ElectromagneticColorGood + "]" +
+					ElectromagneticIcon + "[/color]"
+		} else {
+			electromagneticStr =
+				"[color=" + ElectromagneticColorBad + "]" +
+					ElectromagneticIcon + "[/color]"
+		}
+		blt.Print(MapSizeX+1, MapSizeY-2-y, electromagneticStr)
+	}
+	var numbers = []string{"1", "2", "3", "4"}
+	for i, v := range numbers {
+		if i == c.Active {
+			v = "[color=lighter gray]" + v + "[/color]"
+		} else {
+			v = "[color=gray]" + v + "[/color]"
+		}
+	}
+	blt.Print(MapSizeX, 0, numbers[0]+numbers[1])
+	blt.Print(MapSizeX, MapSizeY-1, numbers[2]+numbers[3])
 }
 
 func RenderAll(b Board, c Creatures) {
