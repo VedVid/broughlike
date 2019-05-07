@@ -156,7 +156,7 @@ func (c *Creature) MoveTowardsPath(b Board, cs Creatures, tx, ty int) {
 		frontiers, startFound = FindAdjacent(b, cs, nodes, frontiers, start, w)
 	}
 	// Uncomment line below, if you want to see nodes' weights.
-	//RenderWeights(nodes)
+	RenderWeights(nodes)
 	dx, dy, err := BacktrackPath(nodes, start)
 	if err != nil {
 		fmt.Println(err)
@@ -187,7 +187,7 @@ func BacktrackPath(nodes [][]*Node, start *Node) (int, int, error) {
 			if nodes[x][y].Weight == nodeInitialWeight {
 				continue // Node is not part of path.
 			}
-			if nodes[x][y].Weight < direction.Weight {
+			if nodes[x][y].Weight == direction.Weight-1 {
 				direction = *nodes[x][y] // Node is closer to goal than current node.
 				goto EndLoop
 			}
