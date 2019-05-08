@@ -27,7 +27,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package main
 
 import (
+	"fmt"
 	"strconv"
+	"unicode/utf8"
 
 	blt "bearlibterminal"
 )
@@ -81,4 +83,13 @@ func RuneCountInBltString(s string) int {
 		}
 	}
 	return length
+}
+
+func SimplePutExt(x, y, dx, dy int, s string,
+	color1, color2, color3, color4 uint32) {
+	if utf8.RuneCountInString(s) != 1 {
+		fmt.Println("ERROR TO HANDLE!")
+	}
+	blt.PutExt(x, y, dx, dy, int(([]rune(s))[0]),
+		[4]uint32{color1, color2, color3, color4})
 }
