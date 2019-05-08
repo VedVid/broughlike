@@ -99,8 +99,24 @@ func PrintCreatures(b Board, c Creatures) {
 	   AlwaysVisible bool is set to true, or is in player fov. */
 	for _, v := range c {
 		blt.Layer(v.Layer)
-		color := blt.ColorFromName(v.Color)
-		SimplePutExt(v.X, v.Y, 0, 0, v.Char, color, color, color, color)
+		baseColor := blt.ColorFromName(v.Color)
+		badColor := blt.ColorFromName("darkest gray")
+		var colors = []uint32{baseColor, baseColor, baseColor, baseColor}
+		hppc := Percents(v.HPCurrent, v.HPMax)
+		switch {
+		case hppc <= 0:
+			colors = []uint32{badColor, badColor, badColor, badColor}
+		case hppc < 25:
+			colors[0], colors[1], colors[2] = badColor, badColor, badColor
+		case hppc < 50:
+			colors[0], colors[1] = badColor, badColor
+		case hppc < 75:
+			colors[0] = badColor
+		default:
+			colors = []uint32{baseColor, baseColor, baseColor, baseColor}
+		}
+		SimplePutExt(v.X, v.Y, 0, 0, v.Char,
+			colors[0], colors[1], colors[2], colors[3])
 	}
 }
 

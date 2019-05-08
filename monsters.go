@@ -144,9 +144,6 @@ func (c *Creature) Die() {
 	   Receiver properties changes to fit better to corpse. */
 	c.Layer = DeadLayer
 	c.Name = "corpse of " + c.Name
-	c.Color = "dark red"
-	c.ColorDark = "dark red"
-	c.Char = CorpseChar
 	c.Blocked = false
 	c.BlocksSight = false
 	c.AIType = NoAI

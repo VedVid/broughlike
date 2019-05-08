@@ -144,3 +144,7 @@ func CreatureIsInSlice(c *Creature, arr Creatures) bool {
 	}
 	return false
 }
+
+func Percents(value int, of int) int {
+	return int(math.Round(float64(value) / float64(of) * float64(100)))
+}
