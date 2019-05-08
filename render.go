@@ -80,12 +80,8 @@ func PrintBoard(b Board, c Creatures) {
 			t := b[x][y] // Should it be *b[x][y]?
 			blt.Layer(t.Layer)
 			if t.Explored == true {
-				ch := t.Char
-				if t.Char == "[" || t.Char == "]" {
-					ch = t.Char + t.Char
-				}
-				glyph := "[color=" + t.Color + "]" + ch
-				blt.Print(t.X, t.Y, glyph)
+				color := blt.ColorFromName(t.Color)
+				SimplePutExt(t.X, t.Y, 0, 0, t.Char, color, color, color, color)
 			}
 		}
 	}
@@ -103,12 +99,8 @@ func PrintCreatures(b Board, c Creatures) {
 	   AlwaysVisible bool is set to true, or is in player fov. */
 	for _, v := range c {
 		blt.Layer(v.Layer)
-		ch := v.Char
-		if v.Char == "]" || v.Char == "[" {
-			ch = v.Char + v.Char
-		}
-		glyph := "[color=" + v.Color + "]" + ch
-		blt.Print(v.X, v.Y, glyph)
+		color := blt.ColorFromName(v.Color)
+		SimplePutExt(v.X, v.Y, 0, 0, v.Char, color, color, color, color)
 	}
 }
 
