@@ -126,7 +126,7 @@ func (c *Creature) Move(tx, ty int, b Board) bool {
 				turnSpent = true
 			} else {
 				if CurrentLevel < len(LevelMaps) {
-					MoveToNextLevel(b, Creatures{c})
+					CurrentLevel++
 				} else {
 					WinScreen()
 				}

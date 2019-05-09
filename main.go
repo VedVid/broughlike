@@ -37,6 +37,7 @@ import (
 
 const NoOfLevels = 5
 
+var OldLevel = 1
 var CurrentLevel = 1
 var LevelMaps = []Board{}
 var CreaturesSpawned = []Creatures{}
@@ -52,6 +53,24 @@ func main() {
 		fmt.Println(len(v))
 	}
 	for {
+		if OldLevel != CurrentLevel {
+			OldLevel = CurrentLevel
+			newBoard := LevelMaps[CurrentLevel-1]
+			for x := 0; x < MapSizeX; x++ {
+				for y := 0; y < MapSizeY; y++ {
+					(*cells)[x][y] = newBoard[x][y]
+				}
+			}
+			act := *actors
+			p := act[0]
+			for i, _ := range act {
+				act[i] = nil
+			}
+			act = nil
+			act = Creatures{p}
+			act = append(act, CreaturesSpawned[CurrentLevel-1]...)
+			*actors = act
+		}
 		RenderAll(*cells, *actors)
 		if (*actors)[0].HPCurrent <= 0 {
 			DeleteSaves()
@@ -90,6 +109,7 @@ func NewGame(b *Board, c *Creatures) {
 	}
 	*c = append(*c, player)
 	SpawnCreatures()
+	*c = append(*c, CreaturesSpawned[0]...)
 }
 
 func StartGame(b *Board, c *Creatures) {
