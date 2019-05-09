@@ -26,9 +26,74 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package main
 
+import (
+	"fmt"
+)
+
+const (
+	// Damage types.
+	BallisticDMG = iota
+	ExplosiveDMG
+	KineticDMG
+	ElectromagneticDMG
+)
+
 func (c *Creature) AttackTarget(t *Creature) {
 	/* Receiver "c" is attacker, argument "t" is target. */
 	t.TakeDamage(c.Attack - t.Defense)
+}
+
+func (c *Creature) Shoot(dx, dy int, b Board, cs Creatures) bool {
+	turnSpent := false
+	tx, ty := c.X, c.Y
+	if dx == (-1) {
+		tx = 0
+	} else if dx == 1 {
+		tx = MapSizeX - 1
+	} else if dy == (-1) {
+		ty = 0
+	} else if dy == 1 {
+		ty = MapSizeY - 1
+	}
+	vec, err := NewVector(c.X, c.Y, tx, ty)
+	if err != nil {
+		fmt.Println(err)
+	}
+	_ = ComputeVector(vec)
+	_, _, target := ValidateVector(vec, b, cs)
+	var attacks = []int{
+		BallisticDMG, ExplosiveDMG, KineticDMG, ElectromagneticDMG}
+	activeAttack := attacks[c.Active]
+	switch activeAttack {
+	case BallisticDMG:
+		if c.Ballistic > 0 {
+			c.Ballistic--
+		}
+	case ExplosiveDMG:
+		if c.Explosive > 0 {
+			c.Explosive--
+		}
+	case KineticDMG:
+		if c.Kinetic > 0 {
+			c.Kinetic--
+		}
+	case ElectromagneticDMG:
+		if c.Electromagnetic > 0 {
+			c.Electromagnetic--
+		}
+	default:
+		return turnSpent
+	}
+	turnSpent = true
+	if target != nil {
+		if (activeAttack == BallisticDMG && target.Ballistic > 0) ||
+			(activeAttack == ExplosiveDMG && target.Explosive > 0) ||
+			(activeAttack == KineticDMG && target.Kinetic > 0) ||
+			(activeAttack == ElectromagneticDMG && target.Electromagnetic > 0) {
+			target.TakeDamage((c.Attack - target.Defense) * 2)
+		}
+	}
+	return turnSpent
 }
 
 func (c *Creature) TakeDamage(dmg int) {
