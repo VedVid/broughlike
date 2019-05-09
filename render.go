@@ -153,7 +153,7 @@ func PrintUI(c *Creature) {
 		}
 		blt.Print(UIPosX+i-1+3, UIPosY+1, levelStr)
 	}
-	for y := 0; y < 5; y++ {
+	for y := 0; y < AmmoMax; y++ {
 		ballisticStr := ""
 		if y < c.Ballistic {
 			ballisticStr =

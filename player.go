@@ -33,6 +33,8 @@ import (
 	"unicode/utf8"
 )
 
+const AmmoMax = 5
+
 func NewPlayer(x, y int) (*Creature, error) {
 	/* NewPlayer is function that returns new Creature
 	   (that is supposed to be player) from json file passed as argument.

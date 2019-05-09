@@ -128,14 +128,54 @@ func (c *Creature) Move(tx, ty int, b Board) bool {
 	return turnSpent
 }
 
-func (c *Creature) PickUp() bool {
+func (c *Creature) PickUp(b Board) bool {
 	/* PickUp is method that has *Creature as receiver.
 	   It will use *Tile as argument.
 	   The idea is to check, if tile has deposits of mana first,
 	   then allow player to "charge" energy from this deposit. */
 	turnSpent := false
-	//CHECK IF TILE HAS MANA SOURCE
+	t := b[c.X][c.Y]
+	if t.Drained == true {
+		return turnSpent
+	}
+	if (t.Resources == BallisticResource && c.Ballistic < AmmoMax) ||
+		(t.Resources == ExplosiveResource && c.Explosive < AmmoMax) ||
+		(t.Resources == KineticResource && c.Kinetic < AmmoMax) ||
+		(t.Resources == ElectromagneticResource &&
+			c.Electromagnetic < AmmoMax) {
+		c.AddAmmo(t.Resources)
+	} else {
+		return turnSpent
+	}
+	t.Drained = true
+	t.Color = ResourcesColors[t.Resources][1]
+	turnSpent = true
 	return turnSpent
+}
+
+func (c *Creature) AddAmmo(resource int) {
+	switch resource {
+	case BallisticResource:
+		c.Ballistic += RandRange(1, 3)
+		if c.Ballistic > AmmoMax {
+			c.Ballistic = AmmoMax
+		}
+	case ExplosiveResource:
+		c.Explosive += RandRange(1, 3)
+		if c.Explosive > AmmoMax {
+			c.Explosive = AmmoMax
+		}
+	case KineticResource:
+		c.Kinetic += RandRange(1, 3)
+		if c.Kinetic > AmmoMax {
+			c.Kinetic = AmmoMax
+		}
+	case ElectromagneticResource:
+		c.Electromagnetic += RandRange(1, 3)
+		if c.Electromagnetic > AmmoMax {
+			c.Electromagnetic = AmmoMax
+		}
+	}
 }
 
 func (c *Creature) Die() {

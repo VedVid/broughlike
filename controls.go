@@ -115,7 +115,7 @@ func Command(com string, p *Creature, b *Board, c *Creatures) bool {
 	case StrAttackWest:
 		turnSpent = p.Shoot(-1, 0, *b, *c)
 	case StrPickup:
-		turnSpent = p.PickUp()
+		turnSpent = p.PickUp(*b)
 	case StrSetWeapon1:
 		turnSpent = p.SetWeapon(1)
 	case StrSetWeapon2:
