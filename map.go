@@ -33,11 +33,44 @@ import (
 	"unicode/utf8"
 )
 
+const (
+	// Iotas for resources
+	NoResource = iota
+	BallisticResource
+	ExplosiveResource
+	KineticResource
+	ElectromagneticResource
+)
+
+var MapResources = []int{
+	BallisticResource,
+	ExplosiveResource,
+	KineticResource,
+	ElectromagneticResource,
+}
+
+var ResourcesCharacters = map[int]string{
+	BallisticResource:       BallisticIcon,
+	ExplosiveResource:       ExplosiveIcon,
+	KineticResource:         KineticIcon,
+	ElectromagneticResource: ElectromagneticIcon,
+}
+
+var ResourcesColors = map[int][]string{
+	BallisticResource: []string{BallisticColorGood, BallisticColorBad},
+	ExplosiveResource: []string{ExplosiveColorGood, ExplosiveColorBad},
+	KineticResource:   []string{KineticColorGood, KineticColorBad},
+	ElectromagneticResource: []string{
+		ElectromagneticColorGood, ElectromagneticColorBad},
+}
+
 type Tile struct {
 	// Tiles are map cells - floors, walls, doors.
 	BasicProperties
 	VisibilityProperties
-	Explored bool
+	Explored  bool
+	Resources int
+	Drained   bool
 	CollisionProperties
 }
 
@@ -67,7 +100,7 @@ func NewTile(layer, x, y int, character, name, color, colorDark string,
 	tileVisibilityProperties := VisibilityProperties{layer, alwaysVisible}
 	tileCollisionProperties := CollisionProperties{blocked, blocksSight}
 	tileNew := &Tile{tileBasicProperties, tileVisibilityProperties,
-		explored, tileCollisionProperties}
+		explored, NoResource, false, tileCollisionProperties}
 	return tileNew, err
 }
 
@@ -167,5 +200,25 @@ func MakeNewLevel() Board {
 			break
 		}
 	}
+	AddResources(b)
 	return b
+}
+
+func AddResources(b Board) {
+	n := RandRange(3, 6)
+	for {
+		if n == 0 {
+			break
+		}
+		x := rand.Intn(MapSizeX)
+		y := rand.Intn(MapSizeY)
+		if b[x][y].Blocked == true {
+			continue
+		}
+		resource := MapResources[rand.Intn(len(MapResources))]
+		b[x][y].Resources = resource
+		b[x][y].Char = ResourcesCharacters[resource]
+		b[x][y].Color = ResourcesColors[resource][0]
+		n--
+	}
 }
