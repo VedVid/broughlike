@@ -83,15 +83,12 @@ func NewGame(b *Board, c *Creatures) {
 		fmt.Println(err)
 	}
 	*c = append(*c, player)
-	enemy, err := NewCreature(player.X-2, player.Y-2, "enemy.json")
-	if err != nil {
-		fmt.Println(err)
-	}
-	*c = append(*c, enemy)
-	for i := 0; i < NoOfLevels; i++ {
-		newLevel := MakeNewLevel()
-		LevelMaps = append(LevelMaps, newLevel)
-	}
+	//enemy, err := NewCreature(player.X-2, player.Y-2, "enemy.json")
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
+	//*c = append(*c, enemy)
+	MakeLevels()
 	*b = LevelMaps[0]
 }
 

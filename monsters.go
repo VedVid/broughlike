@@ -122,7 +122,11 @@ func (c *Creature) Move(tx, ty int, b Board) bool {
 		if b[newX][newY].Blocked == false {
 			c.X = newX
 			c.Y = newY
-			turnSpent = true
+			if b[newX][newY].Stairs == false {
+				turnSpent = true
+			} //else {
+			//MoveToNextLevel()
+			//}
 		}
 	}
 	return turnSpent

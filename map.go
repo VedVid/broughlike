@@ -27,6 +27,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package main
 
 import (
+	blt "bearlibterminal"
+
 	"errors"
 	"fmt"
 	"math/rand"
@@ -71,6 +73,7 @@ type Tile struct {
 	Explored  bool
 	Resources int
 	Drained   bool
+	Stairs    bool
 	CollisionProperties
 }
 
@@ -100,7 +103,7 @@ func NewTile(layer, x, y int, character, name, color, colorDark string,
 	tileVisibilityProperties := VisibilityProperties{layer, alwaysVisible}
 	tileCollisionProperties := CollisionProperties{blocked, blocksSight}
 	tileNew := &Tile{tileBasicProperties, tileVisibilityProperties,
-		explored, NoResource, false, tileCollisionProperties}
+		explored, NoResource, false, false, tileCollisionProperties}
 	return tileNew, err
 }
 
@@ -129,13 +132,13 @@ func InitializeEmptyMap() Board {
 	return b
 }
 
-func MakeDrunkardsMap(b Board) {
+func MakeDrunkardsMap(startX, startY int, b Board) (int, int) {
 	percent := float64(MapSizeX*MapSizeY) / float64(100)
 	digMin := RoundFloatToInt(percent * float64(60))
 	digMax := RoundFloatToInt(percent * float64(85))
 	diggedPercent := RandRange(digMin, digMax)
 	var directions = [][]int{{0, 1}, {-1, 0}, {1, 0}, {0, -1}}
-	x, y := MapSizeX/2, MapSizeY/2
+	x, y := startX, startY
 	for {
 		if b[x][y].Blocked == true {
 			b[x][y].Char = "."
@@ -156,6 +159,7 @@ func MakeDrunkardsMap(b Board) {
 			y = newY
 		}
 	}
+	return x, y
 }
 
 func MapCheck(b Board) bool {
@@ -191,20 +195,24 @@ func MapCheck(b Board) bool {
 	return valid
 }
 
-func MakeNewLevel() Board {
+func MakeNewLevel(startX, startY int) (Board, int, int) {
 	var b Board
+	var newX, newY int
 	for {
 		b = InitializeEmptyMap()
-		MakeDrunkardsMap(b)
+		newX, newY = MakeDrunkardsMap(startX, startY, b)
 		if MapCheck(b) == true {
 			break
 		}
 	}
-	AddResources(b)
-	return b
+	b[newX][newY].Stairs = true
+	b[newX][newY].Color = "white"
+	b[newX][newY].Char = ">"
+	AddResources(b, startX, startY)
+	return b, newX, newY
 }
 
-func AddResources(b Board) {
+func AddResources(b Board, firstX, firstY int) {
 	n := RandRange(3, 6)
 	for {
 		if n == 0 {
@@ -212,7 +220,12 @@ func AddResources(b Board) {
 		}
 		x := rand.Intn(MapSizeX)
 		y := rand.Intn(MapSizeY)
-		if b[x][y].Blocked == true {
+		if x == firstX && y == firstY {
+			continue
+		}
+		if b[x][y].Blocked == true ||
+			b[x][y].Resources != NoResource ||
+			b[x][y].Stairs == true {
 			continue
 		}
 		resource := MapResources[rand.Intn(len(MapResources))]
@@ -221,4 +234,21 @@ func AddResources(b Board) {
 		b[x][y].Color = ResourcesColors[resource][0]
 		n--
 	}
+}
+
+func MakeLevels() {
+	x, y := MapSizeX/2, MapSizeY/2
+	for i := 0; i < NoOfLevels; i++ {
+		var b Board
+		b, x, y = MakeNewLevel(x, y)
+		LevelMaps = append(LevelMaps, b)
+	}
+}
+
+func MoveToNextLevel(b Board, c Creatures) {
+	blt.Clear()
+	CurrentLevel++
+	b = LevelMaps[CurrentLevel-1]
+	c = Creatures{c[0]}
+	RenderAll()
 }
