@@ -39,6 +39,7 @@ const NoOfLevels = 5
 
 var CurrentLevel = 1
 var LevelMaps = []Board{}
+var CreaturesSpawned = []Creatures{}
 
 var KeyboardLayout int
 var CustomControls bool
@@ -47,6 +48,9 @@ func main() {
 	var cells = new(Board)
 	var actors = new(Creatures)
 	StartGame(cells, actors)
+	for _, v := range CreaturesSpawned {
+		fmt.Println(len(v))
+	}
 	for {
 		RenderAll(*cells, *actors)
 		if (*actors)[0].HPCurrent <= 0 {
@@ -78,18 +82,14 @@ func main() {
 func NewGame(b *Board, c *Creatures) {
 	/* Function NewGame initializes game state - creates player, monsters,
 	   and game map. */
+	MakeLevels()
+	*b = LevelMaps[0]
 	player, err := NewPlayer(MapSizeX/2, MapSizeY/2)
 	if err != nil {
 		fmt.Println(err)
 	}
 	*c = append(*c, player)
-	//enemy, err := NewCreature(player.X-2, player.Y-2, "enemy.json")
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-	//*c = append(*c, enemy)
-	MakeLevels()
-	*b = LevelMaps[0]
+	SpawnCreatures()
 }
 
 func StartGame(b *Board, c *Creatures) {

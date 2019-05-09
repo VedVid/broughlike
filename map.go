@@ -38,6 +38,8 @@ import (
 const (
 	ResourcesMin = 3
 	ResourcesMax = 6
+	MonstersMin  = 3
+	MonstersMax  = 5
 )
 
 const (
@@ -247,6 +249,44 @@ func MakeLevels() {
 		var b Board
 		b, x, y = MakeNewLevel(x, y)
 		LevelMaps = append(LevelMaps, b)
+	}
+}
+
+func SpawnCreatures() {
+	for i := 0; i < NoOfLevels; i++ {
+		var cs = Creatures{}
+		n := RandRange(MonstersMin, MonstersMax)
+		for {
+			if n == 0 {
+				break
+			}
+			x, y := rand.Intn(MapSizeX), rand.Intn(MapSizeY)
+			if i > 0 {
+				oldBoard := LevelMaps[i-1]
+				if oldBoard[x][y].Stairs == true {
+					continue
+				}
+			}
+			if LevelMaps[i][x][y].Blocked == true {
+				continue
+			}
+			valid := true
+			for _, v := range cs {
+				if x == v.X && y == v.Y {
+					valid = false
+				}
+			}
+			if valid == false {
+				continue
+			}
+			newEnemy, err := NewCreature(x, y, "enemy.json")
+			if err != nil {
+				fmt.Println(err)
+			}
+			cs = append(cs, newEnemy)
+			n--
+		}
+		CreaturesSpawned = append(CreaturesSpawned, cs)
 	}
 }
 
