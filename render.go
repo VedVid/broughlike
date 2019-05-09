@@ -28,6 +28,7 @@ package main
 
 import (
 	blt "bearlibterminal"
+	"unicode/utf8"
 )
 
 const (
@@ -220,4 +221,14 @@ func RenderAll(b Board, c Creatures) {
 	PrintCreatures(b, c)
 	PrintUI((c)[0])
 	blt.Refresh()
+}
+
+func WinScreen() {
+	blt.Clear()
+	txt := "You have won!"
+	blt.Print((WindowSizeX-utf8.RuneCountInString(txt))/2,
+		WindowSizeY/2, "You have won!")
+	blt.Refresh()
+	blt.Read()
+	blt.Close()
 }

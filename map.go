@@ -248,7 +248,14 @@ func MakeLevels() {
 func MoveToNextLevel(b Board, c Creatures) {
 	blt.Clear()
 	CurrentLevel++
-	b = LevelMaps[CurrentLevel-1]
-	c = Creatures{c[0]}
-	RenderAll()
+	newBoard := LevelMaps[CurrentLevel-1]
+	for x := 0; x < MapSizeX; x++ {
+		for y := 0; y < MapSizeY; y++ {
+			b[x][y] = newBoard[x][y]
+		}
+	}
+	p := c[0]
+	c = nil
+	c = Creatures{p}
+	RenderAll(b, c)
 }

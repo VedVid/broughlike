@@ -124,9 +124,13 @@ func (c *Creature) Move(tx, ty int, b Board) bool {
 			c.Y = newY
 			if b[newX][newY].Stairs == false {
 				turnSpent = true
-			} //else {
-			//MoveToNextLevel()
-			//}
+			} else {
+				if CurrentLevel < len(LevelMaps) {
+					MoveToNextLevel(b, Creatures{c})
+				} else {
+					WinScreen()
+				}
+			}
 		}
 	}
 	return turnSpent

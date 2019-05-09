@@ -35,7 +35,7 @@ import (
 	"time"
 )
 
-const NoOfLevels = 6
+const NoOfLevels = 5
 
 var CurrentLevel = 1
 var LevelMaps = []Board{}
