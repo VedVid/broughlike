@@ -30,6 +30,14 @@ import (
 	"fmt"
 )
 
+const (
+	// Damage types.
+	BallisticDMG = iota
+	ExplosiveDMG
+	KineticDMG
+	ElectromagneticDMG
+)
+
 func (c *Creature) AttackTarget(t *Creature) {
 	/* Receiver "c" is attacker, argument "t" is target. */
 	t.TakeDamage(c.Attack - t.Defense)
@@ -53,41 +61,35 @@ func (c *Creature) Shoot(dx, dy int, b Board, cs Creatures) bool {
 	}
 	_ = ComputeVector(vec)
 	_, _, target := ValidateVector(vec, b, cs)
-	var attacks = []string{
-		"ballistic", "explosive", "kinetic", "electromagnetic"}
+	var attacks = []int{
+		BallisticDMG, ExplosiveDMG, KineticDMG, ElectromagneticDMG}
 	activeAttack := attacks[c.Active]
 	switch activeAttack {
-	case "ballistic":
-		if c.Ballistic <= 0 {
-			return turnSpent
-		} else {
+	case BallisticDMG:
+		if c.Ballistic > 0 {
 			c.Ballistic--
 		}
-	case "kinetic":
-		if c.Kinetic <= 0 {
-			return turnSpent
-		} else {
-			c.Kinetic--
-		}
-	case "electromagnetic":
-		if c.Electromagnetic <= 0 {
-			return turnSpent
-		} else {
-			c.Electromagnetic--
-		}
-	case "explosive":
-		if c.Explosive <= 0 {
-			return turnSpent
-		} else {
+	case ExplosiveDMG:
+		if c.Explosive > 0 {
 			c.Explosive--
 		}
+	case KineticDMG:
+		if c.Kinetic > 0 {
+			c.Kinetic--
+		}
+	case ElectromagneticDMG:
+		if c.Electromagnetic > 0 {
+			c.Electromagnetic--
+		}
+	default:
+		return turnSpent
 	}
 	turnSpent = true
 	if target != nil {
-		if (activeAttack == "ballistic" && target.Ballistic > 0) ||
-			(activeAttack == "kinetic" && target.Kinetic > 0) ||
-			(activeAttack == "electromagnetic" && target.Electromagnetic > 0) ||
-			(activeAttack == "explosive" && target.Explosive > 0) {
+		if (activeAttack == BallisticDMG && target.Ballistic > 0) ||
+			(activeAttack == ExplosiveDMG && target.Explosive > 0) ||
+			(activeAttack == KineticDMG && target.Kinetic > 0) ||
+			(activeAttack == ElectromagneticDMG && target.Electromagnetic > 0) {
 			target.TakeDamage((c.Attack - target.Defense) * 2)
 		}
 	}
