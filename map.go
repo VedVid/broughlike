@@ -36,6 +36,11 @@ import (
 )
 
 const (
+	ResourcesMin = 3
+	ResourcesMax = 6
+)
+
+const (
 	// Iotas for resources
 	NoResource = iota
 	BallisticResource
@@ -213,7 +218,7 @@ func MakeNewLevel(startX, startY int) (Board, int, int) {
 }
 
 func AddResources(b Board, firstX, firstY int) {
-	n := RandRange(3, 6)
+	n := RandRange(ResourcesMin, ResourcesMax)
 	for {
 		if n == 0 {
 			break
