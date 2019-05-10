@@ -1,0 +1,22 @@
+{
+    "Char":"&",
+    "Name":"enemy",
+    "Color":"transparent",
+    "ColorDark":"transparent",
+	"Layer":5,
+    "AlwaysVisible":true,
+    "Blocked":true,
+    "BlocksSight":false,
+    "AIType":3,
+    "AITriggered":true,
+    "HPMax":3,
+    "HPCurrent":3,
+    "Attack":1,
+    "Defense":0,
+	"Basic": 0,
+	"Ballistic": 0,
+	"Explosive": 0,
+	"Kinetic": 0,
+	"Electromagnetic":0,
+	"Active": 0
+}

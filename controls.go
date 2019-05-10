@@ -35,11 +35,19 @@ const (
 	   They have to be strings due to
 	   testing these values with strings
 	   from options_controls.cfg file. */
-	StrMoveNorth = "MOVE_NORTH"
-	StrMoveWest  = "MOVE_WEST"
-	StrMoveEast  = "MOVE_EAST"
-	StrMoveSouth = "MOVE_SOUTH"
-	StrPickup    = "PICKUP"
+	StrMoveNorth   = "MOVE_NORTH"
+	StrMoveWest    = "MOVE_WEST"
+	StrMoveEast    = "MOVE_EAST"
+	StrMoveSouth   = "MOVE_SOUTH"
+	StrAttackNorth = "ATTACK_NORTH"
+	StrAttackWest  = "ATTACK_WEST"
+	StrAttackEast  = "ATTACK_EAST"
+	StrAttackSouth = "ATTACK_SOUTH"
+	StrPickup      = "PICKUP"
+	StrSetWeapon1  = "CHOOSE_WEAPON_1"
+	StrSetWeapon2  = "CHOOSE_WEAPON_2"
+	StrSetWeapon3  = "CHOOSE_WEAPON_3"
+	StrSetWeapon4  = "CHOOSE_WEAPON_4"
 )
 
 var Actions = []string{
@@ -48,16 +56,32 @@ var Actions = []string{
 	StrMoveWest,
 	StrMoveEast,
 	StrMoveSouth,
+	StrAttackNorth,
+	StrAttackWest,
+	StrAttackEast,
+	StrAttackSouth,
 	StrPickup,
+	StrSetWeapon1,
+	StrSetWeapon2,
+	StrSetWeapon3,
+	StrSetWeapon4,
 }
 
 var CommandKeys = map[int]string{
 	// Mapping keyboard scancodes to Action identifiers.
-	blt.TK_UP:    StrMoveNorth,
-	blt.TK_RIGHT: StrMoveEast,
-	blt.TK_DOWN:  StrMoveSouth,
-	blt.TK_LEFT:  StrMoveWest,
+	blt.TK_W:     StrMoveNorth,
+	blt.TK_D:     StrMoveEast,
+	blt.TK_S:     StrMoveSouth,
+	blt.TK_A:     StrMoveWest,
+	blt.TK_UP:    StrAttackNorth,
+	blt.TK_RIGHT: StrAttackEast,
+	blt.TK_DOWN:  StrAttackSouth,
+	blt.TK_LEFT:  StrAttackWest,
 	blt.TK_SPACE: StrPickup,
+	blt.TK_1:     StrSetWeapon1,
+	blt.TK_2:     StrSetWeapon2,
+	blt.TK_3:     StrSetWeapon3,
+	blt.TK_4:     StrSetWeapon4,
 }
 
 /* Place to store customized controls scheme,
@@ -75,15 +99,31 @@ func Command(com string, p *Creature, b *Board, c *Creatures) bool {
 	turnSpent := false
 	switch com {
 	case StrMoveNorth:
-		turnSpent = p.Move(0, -1, *b)
+		turnSpent = p.MoveOrAttack(0, -1, *b, *c)
 	case StrMoveEast:
-		turnSpent = p.Move(1, 0, *b)
+		turnSpent = p.MoveOrAttack(1, 0, *b, *c)
 	case StrMoveSouth:
-		turnSpent = p.Move(0, 1, *b)
+		turnSpent = p.MoveOrAttack(0, 1, *b, *c)
 	case StrMoveWest:
-		turnSpent = p.Move(-1, 0, *b)
+		turnSpent = p.MoveOrAttack(-1, 0, *b, *c)
+	case StrAttackNorth:
+		turnSpent = p.Shoot(0, -1, *b, *c)
+	case StrAttackEast:
+		turnSpent = p.Shoot(1, 0, *b, *c)
+	case StrAttackSouth:
+		turnSpent = p.Shoot(0, 1, *b, *c)
+	case StrAttackWest:
+		turnSpent = p.Shoot(-1, 0, *b, *c)
 	case StrPickup:
-		turnSpent = p.PickUp()
+		turnSpent = p.PickUp(*b)
+	case StrSetWeapon1:
+		turnSpent = p.SetWeapon(1)
+	case StrSetWeapon2:
+		turnSpent = p.SetWeapon(2)
+	case StrSetWeapon3:
+		turnSpent = p.SetWeapon(3)
+	case StrSetWeapon4:
+		turnSpent = p.SetWeapon(4)
 	}
 	return turnSpent
 }

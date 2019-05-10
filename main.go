@@ -31,12 +31,16 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"strconv"
 	"time"
 )
 
-const NoOfLevels = 6
+const NoOfLevels = 5
 
+var OldLevel = 1
 var CurrentLevel = 1
+var LevelMaps = []Board{}
+var CreaturesSpawned = []Creatures{}
 
 var KeyboardLayout int
 var CustomControls bool
@@ -45,7 +49,28 @@ func main() {
 	var cells = new(Board)
 	var actors = new(Creatures)
 	StartGame(cells, actors)
+	for _, v := range CreaturesSpawned {
+		fmt.Println(len(v))
+	}
 	for {
+		if OldLevel != CurrentLevel {
+			OldLevel = CurrentLevel
+			newBoard := LevelMaps[CurrentLevel-1]
+			for x := 0; x < MapSizeX; x++ {
+				for y := 0; y < MapSizeY; y++ {
+					(*cells)[x][y] = newBoard[x][y]
+				}
+			}
+			act := *actors
+			p := act[0]
+			for i, _ := range act {
+				act[i] = nil
+			}
+			act = nil
+			act = Creatures{p}
+			act = append(act, CreaturesSpawned[CurrentLevel-1]...)
+			*actors = act
+		}
 		RenderAll(*cells, *actors)
 		if (*actors)[0].HPCurrent <= 0 {
 			DeleteSaves()
@@ -76,12 +101,15 @@ func main() {
 func NewGame(b *Board, c *Creatures) {
 	/* Function NewGame initializes game state - creates player, monsters,
 	   and game map. */
-	*b = InitializeEmptyMap()
-	player, err := NewPlayer(1, 1)
+	MakeLevels()
+	*b = LevelMaps[0]
+	player, err := NewPlayer(MapSizeX/2, MapSizeY/2)
 	if err != nil {
 		fmt.Println(err)
 	}
 	*c = append(*c, player)
+	SpawnCreatures()
+	*c = append(*c, CreaturesSpawned[0]...)
 }
 
 func StartGame(b *Board, c *Creatures) {
@@ -101,8 +129,21 @@ func StartGame(b *Board, c *Creatures) {
 	}
 }
 
+func StringToSeed(s string) int64 {
+	seed, err := strconv.ParseInt(s, 10, 64)
+	if err != nil {
+		fmt.Println("Error encountered during conversion from string to seed;\n" +
+			"    using current time instead.")
+		seed = time.Now().UTC().UnixNano()
+	}
+	return seed
+}
+
 func init() {
 	rand.Seed(time.Now().UTC().UnixNano())
+	seedS := strconv.Itoa(rand.Intn(1000000))
+	rand.Seed(StringToSeed(seedS))
+	TerminalSeed = "(" + seedS + ")"
 	InitializeBLT()
 	InitializeKeyboardLayouts()
 	ReadOptionsControls()

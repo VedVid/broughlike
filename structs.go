@@ -62,10 +62,16 @@ type FighterProperties struct {
 	   elements as well.
 	   AI types are iota (integers) defined
 	   in creatures.go. */
-	AIType      int
-	AITriggered bool
-	HPMax       int
-	HPCurrent   int
-	Attack      int
-	Defense     int
+	AIType          int
+	AITriggered     bool
+	HPMax           int
+	HPCurrent       int
+	Attack          int
+	Defense         int
+	Basic           int
+	Ballistic       int
+	Explosive       int
+	Kinetic         int
+	Electromagnetic int
+	Active          int
 }
