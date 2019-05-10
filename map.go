@@ -266,6 +266,13 @@ func SpawnCreatures() {
 				if oldBoard[x][y].Stairs == true {
 					continue
 				}
+			} else {
+				centerX := MapSizeX / 2
+				centerY := MapSizeY / 2
+				if (centerX-3 < x) && (x < centerX+3) &&
+					(centerY-3 < y) && (y < centerY+3) {
+					continue
+				}
 			}
 			if LevelMaps[i][x][y].Blocked == true {
 				continue
