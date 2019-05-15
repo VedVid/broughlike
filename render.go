@@ -229,7 +229,5 @@ func WinScreen() {
 	blt.Print((WindowSizeX-utf8.RuneCountInString(txt))/2,
 		WindowSizeY/2, "You have won!")
 	blt.Refresh()
-	DeleteSaves()
 	blt.Read()
-	blt.Close()
 }

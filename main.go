@@ -41,6 +41,7 @@ var OldLevel = 1
 var CurrentLevel = 1
 var LevelMaps = []Board{}
 var CreaturesSpawned = []Creatures{}
+var GameWon = false
 
 var KeyboardLayout int
 var CustomControls bool
@@ -49,9 +50,6 @@ func main() {
 	var cells = new(Board)
 	var actors = new(Creatures)
 	StartGame(cells, actors)
-	for _, v := range CreaturesSpawned {
-		fmt.Println(len(v))
-	}
 	for {
 		if OldLevel != CurrentLevel {
 			OldLevel = CurrentLevel
@@ -75,6 +73,11 @@ func main() {
 		if (*actors)[0].HPCurrent <= 0 {
 			DeleteSaves()
 			blt.Read()
+			break
+		}
+		if GameWon == true {
+			DeleteSaves()
+			WinScreen()
 			break
 		}
 		key := ReadInput()
