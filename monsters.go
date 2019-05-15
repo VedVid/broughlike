@@ -127,7 +127,6 @@ func (c *Creature) Move(tx, ty int, b Board) bool {
 			} else {
 				if c.AIType == PlayerAI {
 					if CurrentLevel < len(LevelMaps) {
-						fmt.Println(c.AIType, c.Char)
 						CurrentLevel++
 					} else {
 						GameWon = true
