@@ -64,23 +64,15 @@ func (c *Creature) Shoot(dx, dy int, b Board, cs Creatures) bool {
 	var attacks = []int{
 		BallisticDMG, ExplosiveDMG, KineticDMG, ElectromagneticDMG}
 	activeAttack := attacks[c.Active]
-	switch activeAttack {
-	case BallisticDMG:
-		if c.Ballistic > 0 {
-			c.Ballistic--
-		}
-	case ExplosiveDMG:
-		if c.Explosive > 0 {
-			c.Explosive--
-		}
-	case KineticDMG:
-		if c.Kinetic > 0 {
-			c.Kinetic--
-		}
-	case ElectromagneticDMG:
-		if c.Electromagnetic > 0 {
-			c.Electromagnetic--
-		}
+	switch {
+	case activeAttack == BallisticDMG && c.Ballistic > 0:
+		c.Ballistic--
+	case activeAttack == ExplosiveDMG && c.Explosive > 0:
+		c.Explosive--
+	case activeAttack == KineticDMG && c.Kinetic > 0:
+		c.Kinetic--
+	case activeAttack == ElectromagneticDMG && c.Electromagnetic > 0:
+		c.Electromagnetic--
 	default:
 		return turnSpent
 	}
