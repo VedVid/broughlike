@@ -125,10 +125,13 @@ func (c *Creature) Move(tx, ty int, b Board) bool {
 			if b[newX][newY].Stairs == false {
 				turnSpent = true
 			} else {
-				if CurrentLevel < len(LevelMaps) {
-					CurrentLevel++
-				} else {
-					GameWon = true
+				if c.AIType == PlayerAI {
+					if CurrentLevel < len(LevelMaps) {
+						fmt.Println(c.AIType, c.Char)
+						CurrentLevel++
+					} else {
+						GameWon = true
+					}
 				}
 			}
 		}
