@@ -128,7 +128,7 @@ func (c *Creature) Move(tx, ty int, b Board) bool {
 				if CurrentLevel < len(LevelMaps) {
 					CurrentLevel++
 				} else {
-					WinScreen()
+					GameWon = true
 				}
 			}
 		}

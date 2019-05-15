@@ -41,6 +41,7 @@ var OldLevel = 1
 var CurrentLevel = 1
 var LevelMaps = []Board{}
 var CreaturesSpawned = []Creatures{}
+var GameWon = false
 
 var KeyboardLayout int
 var CustomControls bool
@@ -75,6 +76,11 @@ func main() {
 		if (*actors)[0].HPCurrent <= 0 {
 			DeleteSaves()
 			blt.Read()
+			break
+		}
+		if GameWon == true {
+			DeleteSaves()
+			WinScreen()
 			break
 		}
 		key := ReadInput()
