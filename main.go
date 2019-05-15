@@ -50,9 +50,6 @@ func main() {
 	var cells = new(Board)
 	var actors = new(Creatures)
 	StartGame(cells, actors)
-	for _, v := range CreaturesSpawned {
-		fmt.Println(len(v))
-	}
 	for {
 		if OldLevel != CurrentLevel {
 			OldLevel = CurrentLevel
