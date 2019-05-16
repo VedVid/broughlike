@@ -111,7 +111,7 @@ func NewGame(b *Board, c *Creatures) {
 		fmt.Println(err)
 	}
 	*c = append(*c, player)
-	SpawnCreatures()
+	SpawnCreatures(RandomCreatures)
 	*c = append(*c, CreaturesSpawned[0]...)
 }
 
