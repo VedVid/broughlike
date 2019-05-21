@@ -43,10 +43,6 @@ const (
 )
 
 const (
-	RandomCreatures = -1
-)
-
-const (
 	// Iotas for resources
 	NoResource = iota
 	BallisticResource
@@ -256,12 +252,10 @@ func MakeLevels() {
 	}
 }
 
-func SpawnCreatures(n int) {
+func SpawnCreatures() {
 	for i := 0; i < NoOfLevels; i++ {
-		if n == RandomCreatures {
-			n = RandRange(MonstersMin, MonstersMax)
-		}
 		var cs = Creatures{}
+		n := RandRange(MonstersMin, MonstersMax)
 		for {
 			if n == 0 {
 				break
