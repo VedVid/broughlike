@@ -126,3 +126,28 @@ func (c *Creature) SetWeapon(i int) bool {
 		return true
 	}
 }
+
+func (c *Creature) AddAmmo(resource int) {
+	switch resource {
+	case BallisticResource:
+		c.Ballistic += RandRange(1, 3)
+		if c.Ballistic > AmmoMax {
+			c.Ballistic = AmmoMax
+		}
+	case ExplosiveResource:
+		c.Explosive += RandRange(1, 3)
+		if c.Explosive > AmmoMax {
+			c.Explosive = AmmoMax
+		}
+	case KineticResource:
+		c.Kinetic += RandRange(1, 3)
+		if c.Kinetic > AmmoMax {
+			c.Kinetic = AmmoMax
+		}
+	case ElectromagneticResource:
+		c.Electromagnetic += RandRange(1, 3)
+		if c.Electromagnetic > AmmoMax {
+			c.Electromagnetic = AmmoMax
+		}
+	}
+}
