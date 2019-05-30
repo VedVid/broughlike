@@ -49,6 +49,10 @@ const (
 )
 
 const (
+	// Values for rendering resources on map.
+	// Icon is the unicode symbol;
+	// ColorGood is the base color of still active source of resource;
+	// ColorBad is color of already drained - therefore inactive - tile.
 	BallisticIcon            = "☉"
 	BallisticColorGood       = "crimson"
 	BallisticColorBad        = "darker crimson"
