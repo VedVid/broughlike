@@ -61,7 +61,9 @@ type FighterProperties struct {
 	   it may be used for destructible environment
 	   elements as well.
 	   AI types are iota (integers) defined
-	   in creatures.go. */
+	   in creatures.go.
+	   Active is the currently selected weapon.
+	   Ballistic and the next ones: ramaining ammunition. */
 	AIType          int
 	AITriggered     bool
 	HPMax           int

@@ -133,6 +133,10 @@ func StartGame(b *Board, c *Creatures) {
 }
 
 func StringToSeed(s string) int64 {
+	/* Function StringToSeed is important for seeded games.
+	   Now, seed is determined by time, but there are plans to
+	   allow player seed manually, even in the form of sentence.
+	   Playing Shakespeare-inspired seed? No problem! */
 	seed, err := strconv.ParseInt(s, 10, 64)
 	if err != nil {
 		fmt.Println("Error encountered during conversion from string to seed;\n" +

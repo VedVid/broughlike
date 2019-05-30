@@ -87,6 +87,8 @@ func RuneCountInBltString(s string) int {
 
 func SimplePutExt(x, y, dx, dy int, s string,
 	color1, color2, color3, color4 uint32) {
+	/* This function is simple wrapper for unnecessarily
+	   complicated PutExt implementation in bearlibterminal.go. */
 	if utf8.RuneCountInString(s) != 1 {
 		fmt.Println("ERROR TO HANDLE!")
 	}

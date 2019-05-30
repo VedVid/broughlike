@@ -36,6 +36,8 @@ import (
 )
 
 const (
+	// Minimum and maximum number of
+	// resources - think "ammo crates" - per level.
 	ResourcesMin = 3
 	ResourcesMax = 6
 	MonstersMin  = 3
@@ -140,6 +142,10 @@ func InitializeEmptyMap() Board {
 }
 
 func MakeDrunkardsMap(startX, startY int, b Board) (int, int) {
+	/* Function MakeDrunkardsMap creates new game level and returns
+	   two integers - coords of the last tile; there will be stairs placed,
+	   and it is the spawn point of player.
+	   Digger walks only in cardinal directions as it fits game mechanics. */
 	percent := float64(MapSizeX*MapSizeY) / float64(100)
 	digMin := RoundFloatToInt(percent * float64(60))
 	digMax := RoundFloatToInt(percent * float64(85))
@@ -170,6 +176,13 @@ func MakeDrunkardsMap(startX, startY int, b Board) (int, int) {
 }
 
 func MapCheck(b Board) bool {
+	/* MapCheck is important function that checks if newly
+	   generated map fits requirements. This very mechanics is
+	   stored in different function to keep it separated
+	   from the level generator per se.
+	   Map is divided into four quadrants. The current requirements
+	   are fairy simple: distribution of blocked tiles on quadrants
+	   should be rather uniform. */
 	valid := true
 	var q1 = []int{0, MapSizeX / 2, 0, MapSizeY / 2}
 	var q2 = []int{MapSizeX / 2, MapSizeX, 0, MapSizeY / 2}
@@ -203,6 +216,8 @@ func MapCheck(b Board) bool {
 }
 
 func MakeNewLevel(startX, startY int) (Board, int, int) {
+	/* Creates new level. Returns game map and coordinates of last tile
+	   (for stairs placement and / or player spawn). */
 	var b Board
 	var newX, newY int
 	for {
@@ -220,6 +235,8 @@ func MakeNewLevel(startX, startY int) (Board, int, int) {
 }
 
 func AddResources(b Board, firstX, firstY int) {
+	/* Adds resources (ammo; basically, it is just Tile with special values) to game map.
+	   Resources can not be placed under the wall, stairs, player. */
 	n := RandRange(ResourcesMin, ResourcesMax)
 	for {
 		if n == 0 {
@@ -244,6 +261,9 @@ func AddResources(b Board, firstX, firstY int) {
 }
 
 func MakeLevels() {
+	/* As game is seeded, all maps should be generated
+	   at the start of the game. MakeLevels fills global LevelMaps
+	   with already generated Boards. */
 	x, y := MapSizeX/2, MapSizeY/2
 	for i := 0; i < NoOfLevels; i++ {
 		var b Board
@@ -253,6 +273,9 @@ func MakeLevels() {
 }
 
 func SpawnCreatures() {
+	/* Spawning creatures is part of generating new level for LevelMaps.
+	   Every level has own number of monsters to spawn. Enemies should not spawn
+	   near the player, stairs, blocked tiles (maybe over the resources as well?). */
 	for i := 0; i < NoOfLevels; i++ {
 		var cs = Creatures{}
 		n := RandRange(MonstersMin, MonstersMax)
@@ -298,6 +321,9 @@ func SpawnCreatures() {
 }
 
 func MoveToNextLevel(b Board, c Creatures) {
+	/* Function MoveToNextLevel clears current level,
+	   loads the new one, spawns player and creatures, then
+	   updates the screen. */
 	blt.Clear()
 	CurrentLevel++
 	newBoard := LevelMaps[CurrentLevel-1]

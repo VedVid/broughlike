@@ -115,6 +115,9 @@ func (c *Creature) MoveOrAttack(tx, ty int, b Board, all Creatures) bool {
 }
 
 func (c *Creature) SetWeapon(i int) bool {
+	/* Sets given weapon as active. Returned value is "turn spent" marker.
+	   If the newly selected weapon was active before player input,
+	   returns false; otherwise, returns true. */
 	i--
 	if i < 0 || i > 3 {
 		return false
@@ -124,5 +127,32 @@ func (c *Creature) SetWeapon(i int) bool {
 	} else {
 		c.Active = i
 		return true
+	}
+}
+
+func (c *Creature) AddAmmo(resource int) {
+	/* If player is standing on resource tile,
+	   may obtain randomly chosen number of ammo. */
+	switch resource {
+	case BallisticResource:
+		c.Ballistic += RandRange(1, 3)
+		if c.Ballistic > AmmoMax {
+			c.Ballistic = AmmoMax
+		}
+	case ExplosiveResource:
+		c.Explosive += RandRange(1, 3)
+		if c.Explosive > AmmoMax {
+			c.Explosive = AmmoMax
+		}
+	case KineticResource:
+		c.Kinetic += RandRange(1, 3)
+		if c.Kinetic > AmmoMax {
+			c.Kinetic = AmmoMax
+		}
+	case ElectromagneticResource:
+		c.Electromagnetic += RandRange(1, 3)
+		if c.Electromagnetic > AmmoMax {
+			c.Electromagnetic = AmmoMax
+		}
 	}
 }

@@ -44,7 +44,11 @@ func (c *Creature) AttackTarget(t *Creature) {
 }
 
 func (c *Creature) Shoot(dx, dy int, b Board, cs Creatures) bool {
+	/* Shooting mechanics is loosely based on RAWIG's ranged utilities.
+	   Even if receiver is set to basic *Creature, it is supposed to be
+	   player's method. */
 	turnSpent := false
+	// shoot in cardinal directions only
 	tx, ty := c.X, c.Y
 	if dx == (-1) {
 		tx = 0
@@ -64,6 +68,7 @@ func (c *Creature) Shoot(dx, dy int, b Board, cs Creatures) bool {
 	var attacks = []int{
 		BallisticDMG, ExplosiveDMG, KineticDMG, ElectromagneticDMG}
 	activeAttack := attacks[c.Active]
+	// this switch checks if player's attack matches target vulnerability
 	switch {
 	case activeAttack == BallisticDMG && c.Ballistic > 0:
 		c.Ballistic--
